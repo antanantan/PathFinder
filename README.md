@@ -4,7 +4,7 @@ Pathfinder is a productivity platform that helps users design and evolve their g
 
 Users can create interactive goal maps using modular nodes (e.g. habits, routines, milestones, etc) The application has built-in AI and feedback loops, turning intentions into adaptive, trackable systems. Customized to how you actually want to live and work.
 
-**Features**
+**Features** <br/>
 ☐ A create form that allows users to define a new goal system <br/>
 ☐ Goals are composed of modular nodes, each representing a milestone, habit, or routine <br/>
 ☐ A visual interface to display goal systems as directed graphs, showing dependencies <br/>
