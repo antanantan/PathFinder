@@ -1,0 +1,27 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: pathfinder-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      #Mounts local backend code into container and changes made on host will reflect in container instantly
+      - ./backend/app:/app
+    env_file:
+      - ./backend/.env
+
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: pathfinder-frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      #Mounts local frontend for instant updates (hot-reloading)
+      - ./frontend:/app
+      #special volume to prevent local node_modules from overwriting, using the one we installed inside the container
+      - /app/node_modules
+    depends_on:
+      - backend
