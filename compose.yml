@@ -9,7 +9,7 @@ services:
       #Mounts local backend code into container and changes made on host will reflect in container instantly
       - ./backend/app:/app
     env_file:
-      - ./backend/.env
+      - ./.env
 
 
   frontend:
@@ -23,5 +23,7 @@ services:
       - ./frontend:/app
       #special volume to prevent local node_modules from overwriting, using the one we installed inside the container
       - /app/node_modules
+    env_file:
+      - ./.env
     depends_on:
       - backend
