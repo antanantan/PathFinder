@@ -1,11 +1,14 @@
 node_modules
 
 dist
+dist--ssr
 
 .env
 .env.*
 
 npm=debug.log*
+logs
+*.log
 
 .git
 .gitignore
