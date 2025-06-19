@@ -43,7 +43,7 @@ This section contains the instructions to get a copy of the project up and runni
     ```
 
 3.  **Configure environment variables:**
-    Open the newly created `.env` file in a text editor. Fill in the placeholder values (`your-super-secret-db-password`, `your-project-ref`, `your-public-anon-key`) with your actual Supabase project credentials.
+    Open the newly created `.env` file in a text editor. Fill in the placeholder values (`your-super-secret-db-password`, `your-project-ref`, `your-public-anon-key`, `service-role-secret-key` ) with your actual Supabase project credentials.
 
 4.  **Build and run the application with Docker Compose:**
     This command will build the Docker images for the frontend and backend services and start them.
