@@ -3,29 +3,29 @@
 
 import { useActionState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { signUpAction } from '../actions';
+import { loginAction } from '../actions';
 
 const initialState = {
     error: null,
-    success: false, 
-    message: '',
+    success: false,  
 };
 
-const SignUpPage = () => {
+const LoginPage = () => {
     // useActionState takes the server action and initial state
     // It returns the current state, a dispatch function for the action, and a pending status
-    const [state, submitAction, isPending] = useActionState(signUpAction, initialState);
+    const [state, submitAction, isPending] = useActionState(loginAction, initialState);
 
-    // If action was successful, render the Navigate component to redirect
+    // If action was successful, we render the Navigate component 
     if (state.success) {
-        // Redirect to the login page after successful signup
-        // Pass the success message and email in the state
-        return <Navigate to="/login" state={{ message: state.message, email: new FormData(document.querySelector('form')!).get('email')}} replace />;
+        // replace prop replaces the 'login' route in the history stack
+        // the user can't click the back button and return to the login page
+        return <Navigate to="/" replace />;
     }
 
+    // If we are not redirecting, we render the login form normally
     return (
         <div>
-            <h2>Create Your Account</h2>
+            <h2>Log In to Your Account</h2>
             <form action={submitAction}>
             <div>
                 <label htmlFor="email">Email</label>
@@ -50,7 +50,7 @@ const SignUpPage = () => {
             </div>
 
             <button type="submit" disabled={isPending}>
-                {isPending ? 'Signing Up...' : 'Sign Up'}
+                {isPending ? 'Logging In...' : 'Log In'}
             </button>
 
             {state.error && <p style={{ color: 'red'}}>{state.error}</p>}
@@ -59,7 +59,7 @@ const SignUpPage = () => {
     );
 };
 
-export default SignUpPage;
+export default LoginPage;
 
 
 
