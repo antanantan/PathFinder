@@ -19,7 +19,7 @@ const LoginPage = () => {
     if (state.success) {
         // replace prop replaces the 'login' route in the history stack
         // the user can't click the back button and return to the login page
-        return <Navigate to="/" replace />;
+        return <Navigate to="/dashboard" replace />;
     }
 
     // If we are not redirecting, we render the login form normally
