@@ -1,38 +1,44 @@
-name: Continuous Integration
+name: Build and Smoke test
 
 on:
-push:
-  branches: ["main"]
+  push:
+    branches: ["main"]
 
-pull_request:
-  branches: ["main"]
+  pull_request:
+    branches: ["main"]
 
 jobs:
   build-and-test:
 
     runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Create .env file
+        run: |
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
+          echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" >> .env
+          # Add any other non-secret variables needed for the build.
+          echo "POSTGRES_USER=postgres" >> .env
+          echo "POSTGRES_DB=postgres" >> .env
 
-  steps:
-    - name: Checkout repo
-      uses: actions/checkout@v4
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
+      - name: Build Docker images
+        run: docker compose build
 
-    #Verifies that the Dockerfile is correct and all dependencies can be installed
-    - name: build backend image
-      uses: docker/build-push-action@v5
-      with:
-        context: ./backend
-        dockerfile: ./backend/Dockerfile 
-        load: true #Load the image into the Docker daemon, don't push to a registry yet
-        tags: pathfinder-backend:ci
+      - name: Start services
+        run: docker compose up -d
 
-    # Runs our tests if the dockerfile is configured to do so but for now validates image can be built successfully
-    - name: build frontend image
-      uses: docker/build-push-action@v5
-      with:
-        context: ./frontend
-        dockerfile: ./frontend/Dockerfile 
-        load: true 
-        tags: pathfinder-frontend:ci
+      - name: Wait for services to be ready
+        run: sleep 15
+
+      - name: Test backend health endpoint
+        run: curl --fail http://localhost:8000/api/test
+
+      - name: Test frontend is responding
+        run: curl --fail http://localhost:5173
+
+      - name: Shutdown services
+        if: always() # Ensure services are stopped even if previous steps fail
+        run: docker compose down -v --remove-orphans
